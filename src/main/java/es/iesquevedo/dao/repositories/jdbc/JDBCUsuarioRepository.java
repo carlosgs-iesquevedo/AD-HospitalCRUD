@@ -10,7 +10,10 @@ public class JDBCUsuarioRepository implements UsuarioRepository {
   @Override
   public Optional<Usuario> findByUsername(String username) {
     // TODO: Implementar la lógica para obtener el usuario desde la base de datos usando JDBC
-    return Optional.of(new Usuario("paciente1", "1234"));
+    return Optional.of(Usuario.builder()
+        .username("paciente1")
+        .password("1234")
+        .build());
   }
 
 }

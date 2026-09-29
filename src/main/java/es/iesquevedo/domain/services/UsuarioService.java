@@ -1,7 +1,7 @@
 package es.iesquevedo.domain.services;
 
-import es.iesquevedo.dao.model.Usuario;
 import es.iesquevedo.dao.repositories.UsuarioRepository;
+import es.iesquevedo.domain.dto.UsuarioDTO;
 import jakarta.inject.Inject;
 
 
@@ -13,7 +13,7 @@ public class UsuarioService {
     this.usuarioRepository = usuarioRepository;
   }
 
-  public boolean login(Usuario usuario) {
+  public boolean login(UsuarioDTO usuario) {
 
     return usuarioRepository.findByUsername(usuario.getUsername())
         .map(u -> u.getUsername().equals(usuario.getUsername())
@@ -21,7 +21,7 @@ public class UsuarioService {
         .orElse(false);
 
     /* equivale a...:
-    Optional<Usuario> usuarioEncontrado = usuarioRepository.findByUsername(usuario.getUsername());
+    Optional<UsuarioDTO> usuarioEncontrado = usuarioRepository.findByUsername(usuario.getUsername());
     if  (usuarioEncontrado.isPresent()) {
       return usuarioEncontrado.get().getPassword().equals(usuario.getPassword())
           && usuarioEncontrado.get().getUsername().equals(usuario.getUsername());

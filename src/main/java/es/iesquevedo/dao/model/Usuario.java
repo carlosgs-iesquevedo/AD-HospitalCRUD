@@ -1,11 +1,17 @@
 package es.iesquevedo.dao.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Builder
+@ToString
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Usuario {
+  private Long id;
   private String username;
   private String password;
+  private Long pacienteId;
+  private Long medicoId;
 }

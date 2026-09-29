@@ -1,6 +1,6 @@
 package es.iesquevedo.ui;
 
-import es.iesquevedo.dao.model.Usuario;
+import es.iesquevedo.domain.dto.UsuarioDTO;
 import es.iesquevedo.domain.services.UsuarioService;
 import jakarta.inject.Inject;
 
@@ -23,7 +23,7 @@ public class UsuarioUI {
       IO.println("Contraseña: ");
       String password = IO.readln();
       if (password.isEmpty()) continue;
-      Usuario credenciales = new Usuario(username, password);
+      UsuarioDTO credenciales = new UsuarioDTO(username, password);
 
       boolean ok = usuarioService.login(credenciales);
       if (ok) {
