@@ -18,6 +18,7 @@
         <lombok.version>1.18.46</lombok.version>
         <mysql.version>8.0.33</mysql.version>
         <hikari.version>7.1.0</hikari.version>
+        <log4j.version>2.26.1</log4j.version>
     </properties>
     <dependencies>
         <!-- API de Jakarta EE -->
@@ -51,6 +52,20 @@
             <artifactId>HikariCP</artifactId>
             <version>${hikari.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+
+        <!-- Logging -->
+
 
     </dependencies>
 
