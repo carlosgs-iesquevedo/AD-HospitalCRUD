@@ -5,17 +5,17 @@ import es.iesquevedo.dao.model.Usuario;
 import es.iesquevedo.dao.repositories.UsuarioRepository;
 import es.iesquevedo.dao.utils.DBConnection;
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class JDBCUsuarioRepository implements UsuarioRepository {
-  private static final Logger logger = Logger.getLogger(JDBCUsuarioRepository.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(JDBCUsuarioRepository.class);
 
   private final DBConnection dbConnection;
 
@@ -32,15 +32,15 @@ public class JDBCUsuarioRepository implements UsuarioRepository {
     try (Connection connection= dbConnection.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.FIND_USUARIO_BY_USERNAME)) {
 
-      logger.log(Level.INFO, SQLQueries.FIND_USUARIO_BY_USERNAME );
+      log.info(SQLQueries.FIND_USUARIO_BY_USERNAME );
       preparedStatement.setString(1, username);
       try (ResultSet rs = preparedStatement.executeQuery()) {
         if (rs.next()) {
           usuario.setPassword(rs.getString("password"));
-          logger.log(Level.INFO, "usuario encontrado: " + username);
+          log.info( "usuario encontrado: {} ", username);
           return Optional.of(usuario);
         }
-        logger.log(Level.INFO, "usuario no encontrado: " + username);
+        log.info("usuario no encontrado: {}", username);
         return Optional.empty();
       }
 

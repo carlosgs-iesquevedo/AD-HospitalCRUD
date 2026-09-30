@@ -1,11 +1,13 @@
 package es.iesquevedo.common;
 
 import jakarta.inject.Singleton;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+@Slf4j
 @Singleton
 public class Configuration {
 
@@ -18,7 +20,7 @@ public class Configuration {
           getClass().getClassLoader().getResourceAsStream(Constantes.MYSQL_PROPERTIES);
       p.loadFromXML(propertiesStream);
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("Error cargando fichero de properties: {}", e.getMessage());
     }
   }
 
