@@ -21,7 +21,7 @@ public class UsuarioService {
         .orElse(false);
 
     /* equivale a...:
-    Optional<UsuarioDTO> usuarioEncontrado = usuarioRepository.findByUsername(usuario.getUsername());
+    Optional<Usuario> usuarioEncontrado = usuarioRepository.findByUsername(usuario.getUsername());
     if  (usuarioEncontrado.isPresent()) {
       return usuarioEncontrado.get().getPassword().equals(usuario.getPassword())
           && usuarioEncontrado.get().getUsername().equals(usuario.getUsername());
