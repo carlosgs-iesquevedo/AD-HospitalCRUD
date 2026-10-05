@@ -24,11 +24,16 @@ public class PacienteDTOMapper
   }
 
   public List<PacienteDTO> toDTOList(List<Paciente> pacientes) {
-
     List<PacienteDTO> listaDtos = new ArrayList<>();
+    /*
+    // Manera 1: Usando for
     for (Paciente paciente : pacientes)  {
       listaDtos.add(toDTO(paciente));
     }
+    */
+
+    // Manera 2: Usando forEach y lambda
+    pacientes.forEach(paciente -> listaDtos.add(toDTO(paciente)));
     return listaDtos;
   }
 

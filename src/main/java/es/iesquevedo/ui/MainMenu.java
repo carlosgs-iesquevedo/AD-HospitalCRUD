@@ -26,7 +26,7 @@ public class MainMenu {
       int opcion = 0;
 
       while (opcion != 10) {
-        IO.println("1. Mostrar todoa los pacientes");
+        IO.println("1. Mostrar todos los pacientes");
         IO.println("10. Salir");
         IO.println("Introduzca una opción ...");
 
