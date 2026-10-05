@@ -3,7 +3,9 @@ package es.iesquevedo.ui;
 import es.iesquevedo.domain.dto.UsuarioDTO;
 import es.iesquevedo.domain.services.UsuarioService;
 import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class UsuarioUI {
   private final UsuarioService usuarioService;
 
@@ -28,6 +30,7 @@ public class UsuarioUI {
       boolean ok = usuarioService.login(credenciales);
       if (ok) {
         IO.println("Bienvenido al sistema.");
+        log.info("bienvenido");
         break;
       } else {
         IO.println("Credenciales incorrectas, inténtelo de nuevo.");

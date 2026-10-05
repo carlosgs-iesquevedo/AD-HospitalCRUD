@@ -4,6 +4,7 @@ import es.iesquevedo.dao.common.SQLQueries;
 import es.iesquevedo.dao.model.Usuario;
 import es.iesquevedo.dao.repositories.UsuarioRepository;
 import es.iesquevedo.dao.utils.DBConnection;
+import es.iesquevedo.domain.error.AppError;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,8 @@ public class JDBCUsuarioRepository implements UsuarioRepository {
       }
 
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      log.error("Error en el login");
+      throw new AppError(e.getMessage());
     }
   }
 
