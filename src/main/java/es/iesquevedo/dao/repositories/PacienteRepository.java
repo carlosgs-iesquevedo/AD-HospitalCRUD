@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PacienteRepository {
     List<Paciente> findAll();
+    Long add (Paciente paciente);
 }

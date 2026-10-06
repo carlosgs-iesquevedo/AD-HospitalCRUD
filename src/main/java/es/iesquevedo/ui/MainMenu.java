@@ -27,6 +27,7 @@ public class MainMenu {
 
       while (opcion != 10) {
         IO.println("1. Mostrar todos los pacientes");
+        IO.println("2. Añadir paciente");
         IO.println("10. Salir");
         IO.println("Introduzca una opción ...");
 
@@ -42,6 +43,9 @@ public class MainMenu {
         switch (opcion) {
           case 1:
             pacienteUi.getAll();
+            break;
+          case 2:
+            pacienteUi.save();
             break;
           case 10:
             IO.println("Hasta la vista");

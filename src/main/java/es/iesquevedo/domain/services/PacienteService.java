@@ -20,4 +20,8 @@ public class PacienteService {
     public List<PacienteDTO> getAll() {
         return pacienteDTOMapper.toDTOList(pacienteRepository.findAll());
     }
+
+    public Long add(PacienteDTO pacienteDTO) {
+        return pacienteRepository.add(pacienteDTOMapper.toEntity(pacienteDTO));
+    }
 }

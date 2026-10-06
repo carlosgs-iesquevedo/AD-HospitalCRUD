@@ -18,8 +18,11 @@ public class PacienteDTOMapper
   }
 
   public Paciente toEntity(PacienteDTO pacienteDTO) {
-    // Completar
     return Paciente.builder()
+            .id(pacienteDTO.getId())
+            .nombre(pacienteDTO.getNombre())
+            .fechaNacimiento(pacienteDTO.getFechaNacimiento())
+            .telefono(pacienteDTO.getTelefono())
       .build();
   }
 
