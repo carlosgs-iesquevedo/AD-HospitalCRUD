@@ -8,8 +8,6 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
-import java.util.Scanner;
-import java.util.logging.Level;
 
 @Slf4j
 public class PacienteUI {
@@ -40,7 +38,7 @@ public class PacienteUI {
                 .build();
             IO.println(pacienteService.add(pacienteDTO));
         } catch (DatabaseError e) {
-            log.error("Error de base de datos en PatientService.addPatient()", e);
+            log.error("Error de base de datos en PatientService.addPatient()");
         } catch (Exception e) {
             log.error("Error inesperado", e);
             throw new AppError("Error crítico en addPatient()");

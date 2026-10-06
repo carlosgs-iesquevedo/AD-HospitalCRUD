@@ -7,6 +7,7 @@ import es.iesquevedo.dao.model.Paciente;
 import es.iesquevedo.dao.repositories.PacienteRepository;
 import es.iesquevedo.dao.utils.DBConnection;
 import es.iesquevedo.domain.error.DatabaseError;
+import es.iesquevedo.domain.error.PacienteDuplicadoError;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,8 +48,7 @@ public class JDBCPacienteRepository implements PacienteRepository {
     @Override
     public Long add(Paciente paciente) {
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(SQLQueries.ADD_PACIENTE, Statement.RETURN_GENERATED_KEYS);
-
+             PreparedStatement pstmt = conn.prepareStatement(SQLQueries.ADD_PACIENTE, Statement.RETURN_GENERATED_KEYS)
         ) {
             pstmt.setString(1, paciente.getNombre());
             pstmt.setDate(2, Date.valueOf(paciente.getFechaNacimiento()));
@@ -63,7 +63,9 @@ public class JDBCPacienteRepository implements PacienteRepository {
                 }
             }
             return paciente.getId();
-
+        } catch (SQLIntegrityConstraintViolationException e) {
+            log.error(e.getMessage());
+            throw new PacienteDuplicadoError();
         } catch (SQLException e) {
             log.error(e.getMessage());
             throw new DatabaseError(Constantes.DATABASE_ERROR);
