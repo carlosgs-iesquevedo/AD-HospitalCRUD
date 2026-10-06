@@ -1,6 +1,6 @@
 package es.iesquevedo.ui;
 
-import es.iesquevedo.domain.dto.PacienteDTO;
+import es.iesquevedo.domain.dto.PacienteDTOAlta;
 import es.iesquevedo.domain.error.AppError;
 import es.iesquevedo.domain.error.DatabaseError;
 import es.iesquevedo.domain.services.PacienteService;
@@ -31,10 +31,12 @@ public class PacienteUI {
 
     public void save() {
         try {
-            PacienteDTO pacienteDTO = PacienteDTO.builder()
-                .nombre("María")
+            PacienteDTOAlta pacienteDTO = PacienteDTOAlta.builder()
+                .nombre("Mario")
                 .fechaNacimiento(LocalDate.of(2003, 10, 23))
                 .telefono("690 555 777")
+                .username("mario")
+                .password("1234")
                 .build();
             IO.println(pacienteService.add(pacienteDTO));
         } catch (DatabaseError e) {

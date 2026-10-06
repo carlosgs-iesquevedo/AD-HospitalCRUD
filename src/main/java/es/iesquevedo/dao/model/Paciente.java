@@ -15,4 +15,5 @@ public class Paciente {
     private String nombre;
     private LocalDate fechaNacimiento;
     private String telefono;
+    private Usuario usuario;
 }

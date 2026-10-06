@@ -22,7 +22,8 @@ public class JDBCPacienteRepository implements PacienteRepository {
     private final PacienteRowMapper pacienteRowMapper;
 
     @Inject
-    public JDBCPacienteRepository(DBConnection dbConnection, PacienteRowMapper pacienteRowMapper) {
+    public JDBCPacienteRepository(DBConnection dbConnection,
+                                  PacienteRowMapper pacienteRowMapper) {
         this.dbConnection = dbConnection;
         this.pacienteRowMapper = pacienteRowMapper;
     }
@@ -48,25 +49,41 @@ public class JDBCPacienteRepository implements PacienteRepository {
     @Override
     public Long add(Paciente paciente) {
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(SQLQueries.ADD_PACIENTE, Statement.RETURN_GENERATED_KEYS)
+             PreparedStatement pstmtPaciente = conn.prepareStatement(SQLQueries.ADD_PACIENTE, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement pstmtUsuario = conn.prepareStatement(SQLQueries.ADD_USUARIO)
         ) {
-            pstmt.setString(1, paciente.getNombre());
-            pstmt.setDate(2, Date.valueOf(paciente.getFechaNacimiento()));
-            pstmt.setString(3, paciente.getTelefono());
+            try {
+            conn.setAutoCommit(false);
+            pstmtPaciente.setString(1, paciente.getNombre());
+            pstmtPaciente.setDate(2, Date.valueOf(paciente.getFechaNacimiento()));
+            pstmtPaciente.setString(3, paciente.getTelefono());
 
-            int filasAfectadas = pstmt.executeUpdate();
+            int filasAfectadas = pstmtPaciente.executeUpdate();
 
             if (filasAfectadas > 0) {
-                ResultSet idsGenerados = pstmt.getGeneratedKeys();
+                ResultSet idsGenerados = pstmtPaciente.getGeneratedKeys();
                 if (idsGenerados.next()) {
                     paciente.setId(idsGenerados.getLong(1));
+                    pstmtUsuario.setString(1, paciente.getUsuario().getUsername());
+                    pstmtUsuario.setString(2, paciente.getUsuario().getPassword());
+                    pstmtUsuario.setLong(3, paciente.getId());
+                    pstmtUsuario.executeUpdate();
+                    conn.commit();
                 }
             }
             return paciente.getId();
         } catch (SQLIntegrityConstraintViolationException e) {
+            conn.rollback();
             log.error(e.getMessage());
             throw new PacienteDuplicadoError();
         } catch (SQLException e) {
+            conn.rollback();
+            log.error(e.getMessage());
+            throw new DatabaseError(Constantes.DATABASE_ERROR);
+        } finally {
+            conn.setAutoCommit(true);
+        }
+      } catch (SQLException e) {
             log.error(e.getMessage());
             throw new DatabaseError(Constantes.DATABASE_ERROR);
         }

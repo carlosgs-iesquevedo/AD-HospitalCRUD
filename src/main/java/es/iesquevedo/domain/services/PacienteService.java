@@ -2,6 +2,7 @@ package es.iesquevedo.domain.services;
 
 import es.iesquevedo.dao.repositories.PacienteRepository;
 import es.iesquevedo.domain.dto.PacienteDTO;
+import es.iesquevedo.domain.dto.PacienteDTOAlta;
 import es.iesquevedo.domain.mappers.PacienteDTOMapper;
 import jakarta.inject.Inject;
 
@@ -21,7 +22,7 @@ public class PacienteService {
         return pacienteDTOMapper.toDTOList(pacienteRepository.findAll());
     }
 
-    public Long add(PacienteDTO pacienteDTO) {
+    public Long add(PacienteDTOAlta pacienteDTO) {
         return pacienteRepository.add(pacienteDTOMapper.toEntity(pacienteDTO));
     }
 }

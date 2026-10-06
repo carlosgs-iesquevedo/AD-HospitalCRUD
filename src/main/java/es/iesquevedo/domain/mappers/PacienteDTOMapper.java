@@ -1,7 +1,9 @@
 package es.iesquevedo.domain.mappers;
 
 import es.iesquevedo.dao.model.Paciente;
+import es.iesquevedo.dao.model.Usuario;
 import es.iesquevedo.domain.dto.PacienteDTO;
+import es.iesquevedo.domain.dto.PacienteDTOAlta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,19 @@ public class PacienteDTOMapper
             .telefono(pacienteDTO.getTelefono())
       .build();
   }
+
+  public Paciente toEntity(PacienteDTOAlta pacienteDTO) {
+    return Paciente.builder()
+        .nombre(pacienteDTO.getNombre())
+        .fechaNacimiento(pacienteDTO.getFechaNacimiento())
+        .telefono(pacienteDTO.getTelefono())
+        .usuario(Usuario.builder()
+            .username(pacienteDTO.getUsername())
+            .password(pacienteDTO.getPassword())
+            .build())
+        .build();
+  }
+
 
   public List<PacienteDTO> toDTOList(List<Paciente> pacientes) {
     List<PacienteDTO> listaDtos = new ArrayList<>();
