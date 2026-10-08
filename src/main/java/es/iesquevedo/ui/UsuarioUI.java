@@ -15,26 +15,33 @@ public class UsuarioUI {
   }
 
   public void login() {
+    final int MAX_INTENTOS = 3;
+    int intentos = 0;
+
     IO.println("Por favor, introduzca sus credenciales");
 
-    while (true) {
-      IO.println("Usuario: ");
-      String username = IO.readln();
-      if (username.isEmpty()) continue;
+    while (intentos < MAX_INTENTOS) {
+      IO.println("Usuario (0 para salir): ");
+      String username = IO.readln().trim();
+      if ("0".equals(username)) return;
 
       IO.println("Contraseña: ");
       String password = IO.readln();
-      if (password.isEmpty()) continue;
-      UsuarioDTO credenciales = new UsuarioDTO(username, password);
 
-      boolean ok = usuarioService.login(credenciales);
-      if (ok) {
-        IO.println("Bienvenido al sistema.");
-        log.info("bienvenido");
-        break;
-      } else {
-        IO.println("Credenciales incorrectas, inténtelo de nuevo.");
+      if (username.isEmpty() || password.isEmpty()) {
+        IO.println("Usuario y contraseña son obligatorios.");
+        continue;
       }
+
+      if (usuarioService.login(new UsuarioDTO(username, password))) {
+        IO.println("Bienvenido al sistema.");
+        return;
+      }
+
+      intentos++;
+      IO.println("Credenciales incorrectas. Intentos restantes: " + (MAX_INTENTOS - intentos));
     }
+
+    IO.println("Has superado el número máximo de intentos.");
   }
 }
