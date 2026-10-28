@@ -28,14 +28,13 @@ public class JDBCUsuarioRepository implements UsuarioRepository {
   @Override
   public Optional<Usuario> findByUsername(String username) {
 
-
     Usuario usuario = Usuario.builder().username(username).build();
-    try (Connection connection= dbConnection.getConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.FIND_USUARIO_BY_USERNAME)) {
+    try (Connection conn= dbConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(SQLQueries.FIND_USUARIO_BY_USERNAME)) {
 
       log.info(SQLQueries.FIND_USUARIO_BY_USERNAME );
-      preparedStatement.setString(1, username);
-      try (ResultSet rs = preparedStatement.executeQuery()) {
+      pstmt.setString(1, username);
+      try (ResultSet rs = pstmt.executeQuery()) {
         if (rs.next()) {
           usuario.setPassword(rs.getString("password"));
           log.info( "usuario encontrado: {} ", username);

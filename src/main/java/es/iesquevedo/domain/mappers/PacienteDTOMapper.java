@@ -11,6 +11,8 @@ import java.util.List;
 public class PacienteDTOMapper
 {
   public PacienteDTO toDTO(Paciente paciente) {
+    if  (paciente == null)
+      return null;
     return PacienteDTO.builder()
             .id(paciente.getId())
             .nombre(paciente.getNombre())
@@ -20,6 +22,8 @@ public class PacienteDTOMapper
   }
 
   public Paciente toEntity(PacienteDTO pacienteDTO) {
+    if  (pacienteDTO == null)
+      return null;
     return Paciente.builder()
             .id(pacienteDTO.getId())
             .nombre(pacienteDTO.getNombre())
@@ -29,6 +33,8 @@ public class PacienteDTOMapper
   }
 
   public Paciente toEntity(PacienteDTOAlta pacienteDTO) {
+    if  (pacienteDTO == null)
+      return null;
     return Paciente.builder()
         .nombre(pacienteDTO.getNombre())
         .fechaNacimiento(pacienteDTO.getFechaNacimiento())
