@@ -3,7 +3,9 @@ package es.iesquevedo.dao.repositories.jdbc;
 import es.iesquevedo.common.Constantes;
 import es.iesquevedo.dao.common.SQLQueries;
 import es.iesquevedo.dao.mappers.PacienteRowMapper;
+import es.iesquevedo.dao.model.HistoriaClinica;
 import es.iesquevedo.dao.model.Paciente;
+import es.iesquevedo.dao.model.Receta;
 import es.iesquevedo.dao.repositories.PacienteRepository;
 import es.iesquevedo.dao.utils.DBConnection;
 import es.iesquevedo.domain.error.DatabaseError;
@@ -168,6 +170,62 @@ public class JDBCPacienteRepository implements PacienteRepository {
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, id);
             pstmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void restore(Paciente paciente, List<HistoriaClinica> historias) {
+        try (Connection conn = dbConnection.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                try (PreparedStatement pstmt = conn.prepareStatement(SQLQueries.RESTORE_PACIENTE)) {
+                    pstmt.setLong(1, paciente.getId());
+                    pstmt.setString(2, paciente.getNombre());
+                    pstmt.setDate(3, Date.valueOf(paciente.getFechaNacimiento()));
+                    pstmt.setString(4, paciente.getTelefono());
+                    pstmt.executeUpdate();
+                }
+                for (HistoriaClinica historia : historias) {
+                    restaurarHistoria(conn, paciente.getId(), historia);
+                }
+                conn.commit();
+            } catch (SQLIntegrityConstraintViolationException e) {
+                conn.rollback();
+                log.error(e.getMessage());
+                if (e.getErrorCode() == 1062) { // clave duplicada
+                    throw new PacienteDuplicadoError();
+                }
+                throw new ForeignKeyError();
+            } catch (SQLException e) {
+                conn.rollback();
+                log.error(e.getMessage());
+                throw new DatabaseError(Constantes.DATABASE_ERROR);
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+            throw new DatabaseError(Constantes.DATABASE_ERROR);
+        }
+    }
+
+    private void restaurarHistoria(Connection conn, Long pacienteId, HistoriaClinica historia) throws SQLException {
+        try (PreparedStatement pstmt = conn.prepareStatement(SQLQueries.RESTORE_HISTORIA)) {
+            pstmt.setLong(1, historia.getId());
+            pstmt.setLong(2, pacienteId);
+            pstmt.setLong(3, historia.getMedico().getId());
+            pstmt.setString(4, historia.getDiagnostico());
+            pstmt.setDate(5, Date.valueOf(historia.getFechaAdmision()));
+            pstmt.executeUpdate();
+        }
+        try (PreparedStatement pstmt = conn.prepareStatement(SQLQueries.RESTORE_RECETA)) {
+            for (Receta receta : historia.getRecetas()) {
+                pstmt.setLong(1, receta.getId());
+                pstmt.setLong(2, historia.getId());
+                pstmt.setString(3, receta.getMedicamento());
+                pstmt.setInt(4, receta.getDosis() == null ? 0 : Integer.parseInt(receta.getDosis()));
+                pstmt.executeUpdate();
+            }
         }
     }
 }

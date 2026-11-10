@@ -1,5 +1,6 @@
 package es.iesquevedo.dao.repositories;
 
+import es.iesquevedo.dao.model.HistoriaClinica;
 import es.iesquevedo.dao.model.Paciente;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface PacienteRepository {
     Long add (Paciente paciente);
     void update (Paciente paciente);
     void delete (Long id, boolean tieneHistorias);
+    void restore(Paciente paciente, List<HistoriaClinica> historias);
 }

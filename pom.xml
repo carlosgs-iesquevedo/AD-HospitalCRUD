@@ -20,6 +20,8 @@
         <hikari.version>7.1.0</hikari.version>
         <log4j.version>2.26.1</log4j.version>
         <slf4j.version>2.0.19</slf4j.version>
+        <jaxb.api.version>4.0.2</jaxb.api.version>
+        <jaxb.runtime.version>4.0.5</jaxb.runtime.version>
     </properties>
     <dependencies>
         <!-- API de Jakarta EE -->
@@ -68,6 +70,20 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j2-impl</artifactId>
             <version>${log4j.version}</version>
+        </dependency>
+
+        <!-- API de JAXB (Jakarta) -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jaxb.api.version}</version>
+        </dependency>
+        <!-- Implementación de JAXB (Runtime) -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>${jaxb.runtime.version}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

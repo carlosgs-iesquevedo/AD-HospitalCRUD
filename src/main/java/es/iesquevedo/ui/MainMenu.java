@@ -16,7 +16,8 @@ public class MainMenu {
   private static final int OPCION_AÑADIR_REGISTRO_HISTORIA  = 7;
   private static final int OPCION_ACTUALIZAR_REGISTRO_HISTORIA  = 8;
   private static final int OPCION_BORRAR_REGISTRO_HISTORIA  = 9;
-  private static final int OPCION_SALIR = 10;
+  private static final int OPCION_RESTAURAR_PACIENTE = 10;
+  private static final int OPCION_SALIR = 99;
 
   private final UsuarioUI usuarioUi;
   private final PacienteUI pacienteUi;
@@ -70,6 +71,9 @@ public class MainMenu {
           case OPCION_BORRAR_REGISTRO_HISTORIA:
             historiaUi.delete();
             break;
+          case OPCION_RESTAURAR_PACIENTE:
+            pacienteUi.restore(introPaciente());
+            break;
           case OPCION_SALIR:
             IO.println("Hasta la vista.");
             break;
@@ -99,6 +103,7 @@ public class MainMenu {
     IO.println(OPCION_AÑADIR_REGISTRO_HISTORIA + ". Añadir un registro a la historia de un paciente");
     IO.println(OPCION_ACTUALIZAR_REGISTRO_HISTORIA + ". Actualizar un registro de la historia de un paciente");
     IO.println(OPCION_BORRAR_REGISTRO_HISTORIA + ". Borrar un registro");
+    IO.println(OPCION_RESTAURAR_PACIENTE + ". Restaurar paciente");
     IO.println(OPCION_SALIR + ". Salir");
     IO.println("Introduzca una opción:");
   }

@@ -46,4 +46,8 @@ public class SQLQueries {
   // Factura queries
   public static final String DELETE_FACTURAS_BY_PACIENTE = "DELETE FROM facturas WHERE paciente_id = ?";
 
+  // Backup/Restore queries
+  public static final String RESTORE_PACIENTE = "INSERT INTO pacientes (paciente_id, nombre, fecha_nacimiento, telefono) VALUES (?, ?, ?, ?)";
+  public static final String RESTORE_HISTORIA = "INSERT INTO historia_clinica (historia_id, paciente_id, medico_id, diagnostico, fecha_admision) VALUES (?, ?, ?, ?, ?)";
+  public static final String RESTORE_RECETA = "INSERT INTO recetas (receta_id, historia_id, medicamento, dosis) VALUES (?, ?, ?, ?)";
 }

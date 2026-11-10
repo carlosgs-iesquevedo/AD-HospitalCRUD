@@ -2,9 +2,7 @@ package es.iesquevedo.ui;
 
 import es.iesquevedo.domain.dto.PacienteDTO;
 import es.iesquevedo.domain.dto.PacienteDTOAlta;
-import es.iesquevedo.domain.error.AppError;
-import es.iesquevedo.domain.error.DatabaseError;
-import es.iesquevedo.domain.error.PacienteNoEncontradoError;
+import es.iesquevedo.domain.error.*;
 import es.iesquevedo.domain.services.PacienteService;
 import es.iesquevedo.domain.services.PacienteService.ResultadoBorrado;
 import jakarta.inject.Inject;
@@ -89,6 +87,8 @@ public class PacienteUI {
             IO.println("No existe un paciente con ese ID");
         } catch (DatabaseError e) {
             log.error("Error de base de datos en PacienteService.delete()");
+        } catch (XmlError e) {
+            log.error("Error de XML: {}", e.getMessage());
         } catch (Exception e) {
             log.error("Error inesperado", e);
             throw new AppError("Error crítico en PacienteUI.delete()");
@@ -99,6 +99,27 @@ public class PacienteUI {
         IO.println(mensaje);
         String respuesta = IO.readln();
         return respuesta != null && respuesta.trim().equalsIgnoreCase("s");
+    }
+
+    public void restore(Long pacienteId) {
+        if (pacienteId == null)
+            return;
+        try {
+            pacienteService.restore(pacienteId);
+            IO.println("Paciente restaurado con ID " + pacienteId);
+        } catch (PacienteDuplicadoError e) {
+            IO.println("Error: el paciente ya existe en la BD, no se restaura.");
+        } catch (ForeignKeyError e) {
+            IO.println("Error: el XML referencia entidades inexistentes (p. ej. médico).");
+        } catch (XmlError e) {
+            IO.println("Error de XML: " + e.getMessage());
+        } catch (DatabaseError e) {
+            log.error("Error de base de datos en PacienteService.restore()");
+            IO.println("Error de base de datos, no se ha restaurado el paciente.");
+        } catch (Exception e) {
+            log.error("Error inesperado", e);
+            throw new AppError("Error crítico en PacienteUI.restore()");
+        }
     }
 
 

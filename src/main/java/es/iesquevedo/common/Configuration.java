@@ -1,5 +1,6 @@
 package es.iesquevedo.common;
 
+import es.iesquevedo.domain.error.AppError;
 import jakarta.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,13 +12,15 @@ import java.util.Properties;
 @Singleton
 public class Configuration {
 
-  private final Properties p;
+  private final Properties p = new Properties();
 
   public Configuration() {
-    p = new Properties();
-    try {
-      InputStream propertiesStream =
-          getClass().getClassLoader().getResourceAsStream(Constantes.MYSQL_PROPERTIES);
+    try (InputStream propertiesStream =
+          getClass().getClassLoader().getResourceAsStream(Constantes.MYSQL_PROPERTIES)) {
+
+      if (propertiesStream == null) {
+        throw new AppError("No se pudo encontrar el archivo de propiedades: " + Constantes.MYSQL_PROPERTIES);
+      }
       p.loadFromXML(propertiesStream);
     } catch (IOException e) {
       log.error("Error cargando fichero de properties: {}", e.getMessage());
